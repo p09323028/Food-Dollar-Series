@@ -1,2 +1,2 @@
-# Food-Dollar-Series
-Food (New Taiwan) Dollar Series
+# Food Dollar Series
+The Food (New Taiwan) Dollar Series measures annual expenditures by Taiwan consumers on domestically produced food. This data series is composed of three primary series—the marketing bill series, the industry group series, and the primary factor series—that describe different aspects of the food-supply chain. The three series show three different ways to split up the same food dollar
