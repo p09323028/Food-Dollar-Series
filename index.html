@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2021 台灣食物美元 · Taiwan Food Dollar Series</title>
+<meta name="description" content="2021 年台灣食物美元系列:每 100 元食物支出在市場支出鏈、產業群組鏈與原始投入鏈三種視角下的流向分解。">
+
+<style>
+  :root{
+    /* —— 鈔票油墨色系 —— */
+    --paper:    #ece6d8;   /* 鈔券紙 */
+    --paper-2:  #e3dcca;   /* 紙紋陰影 */
+    --ink:      #241b22;   /* 雕版墨黑(帶紫) */
+    --ink-soft: #5d5249;   /* 次要文字 */
+    --line:     #c5bca6;   /* 細紋線 */
+    --crimson:  #a4303b;   /* 百元券紅 */
+    --farm:     #2e6b4a;   /* 雕版綠 = 農場/價值 */
+    --gold:     #a8862f;   /* 鋼印金 */
+    --hair:     rgba(36,27,34,.16);
+
+    --serif: Georgia, "Times New Roman", "Songti TC", serif;
+    --han:   "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", "Heiti TC", sans-serif;
+    --mono:  "Cascadia Mono", "Consolas", ui-monospace, monospace;
+
+    --maxw: 980px;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--han);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  /* 全頁鈔券底紋 */
+  #guilloche-bg{
+    position:fixed; inset:0; width:100%; height:100%;
+    z-index:0; pointer-events:none; opacity:.5;
+  }
+
+  .wrap{
+    position:relative; z-index:1;
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:clamp(28px,6vw,72px) clamp(20px,5vw,40px) 96px;
+  }
+
+  /* —— 共用排版 —— */
+  .eyebrow{
+    font-size:.72rem; letter-spacing:.32em; text-transform:uppercase;
+    color:var(--crimson); font-weight:700; margin:0 0 14px;
+  }
+  h1{
+    font-family:var(--han); font-weight:800;
+    font-size:clamp(2rem,5.4vw,3.4rem); line-height:1.12;
+    letter-spacing:-.01em; margin:0 0 18px; text-wrap:balance;
+  }
+  .lede{
+    font-size:clamp(1rem,1.6vw,1.16rem); color:var(--ink-soft);
+    max-width:62ch; margin:0;
+  }
+  .num{ font-family:var(--serif); font-variant-numeric:tabular-nums; }
+
+  section{ margin-top:clamp(56px,9vw,104px); }
+  .sec-head{
+    display:flex; align-items:baseline; gap:16px;
+    border-bottom:1.5px solid var(--ink);
+    padding-bottom:10px; margin-bottom:8px;
+  }
+  .sec-idx{
+    font-family:var(--serif); font-size:1rem; color:var(--gold);
+    font-weight:700; font-variant-numeric:tabular-nums;
+  }
+  .sec-head h2{
+    font-size:clamp(1.35rem,3vw,1.9rem); font-weight:800; margin:0;
+    letter-spacing:-.01em;
+  }
+  .sec-head .en{
+    margin-left:auto; font-size:.74rem; letter-spacing:.18em;
+    text-transform:uppercase; color:var(--ink-soft); font-weight:600;
+    white-space:nowrap;
+  }
+  .sec-desc{ color:var(--ink-soft); max-width:64ch; margin:14px 0 26px; }
+
+  /* —— 鈔券面板 —— */
+  .note{
+    position:relative;
+    background:linear-gradient(135deg,var(--paper) 0%, var(--paper-2) 100%);
+    border:1.5px solid var(--ink);
+    border-radius:6px;
+    padding:18px;
+    box-shadow:0 1px 0 var(--paper) inset, 0 0 0 4px var(--paper) inset, 0 0 0 5px var(--hair) inset;
+  }
+  .note::before{
+    content:""; position:absolute; inset:7px; border:1px solid var(--hair);
+    border-radius:3px; pointer-events:none;
+  }
+  .note-corner{
+    position:absolute; font-family:var(--serif); font-weight:700;
+    font-size:.92rem; color:var(--crimson); letter-spacing:.05em;
+  }
+  .note-corner.tl{ top:13px; left:15px; }
+  .note-corner.br{ bottom:13px; right:15px; }
+
+  /* 分段長條 */
+  .bar{
+    position:relative; z-index:1;
+    display:flex; width:100%; height:118px;
+    border:1px solid var(--ink); border-radius:3px; overflow:hidden;
+    background:var(--ink);
+  }
+  .bar.tall{ height:150px; }
+  .seg{
+    position:relative;
+    display:flex; flex-direction:column; justify-content:flex-end;
+    padding:8px 7px; min-width:0;
+    border-right:1px solid rgba(236,230,216,.55);
+    color:#f2ecdd; overflow:hidden;
+  }
+  .seg:last-child{ border-right:0; }
+  .seg .pct{ font-family:var(--serif); font-weight:700; font-size:1.02rem;
+    font-variant-numeric:tabular-nums; line-height:1; text-shadow:0 1px 2px rgba(0,0,0,.3); }
+  .seg .lab{ font-size:.7rem; margin-top:3px; opacity:.92; line-height:1.15;
+    white-space:nowrap; text-overflow:ellipsis; overflow:hidden;
+    text-shadow:0 1px 2px rgba(0,0,0,.3); }
+  .seg.hide-lab .pct, .seg.hide-lab .lab{ display:none; }
+
+  /* 圖例 / 明細 */
+  .legend{
+    list-style:none; margin:22px 0 0; padding:0;
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(232px,1fr));
+    gap:2px 26px;
+  }
+  .legend li{
+    display:grid; grid-template-columns:14px 1fr auto;
+    align-items:center; gap:10px;
+    padding:9px 2px; border-bottom:1px solid var(--line);
+  }
+  .legend .sw{ width:13px; height:13px; border-radius:2px; border:1px solid var(--hair); }
+  .legend .nm{ font-size:.92rem; }
+  .legend .nm small{ display:block; font-size:.66rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--ink-soft); }
+  .legend .vv{ font-family:var(--serif); font-weight:700; font-size:1rem;
+    font-variant-numeric:tabular-nums; }
+  .legend .vv::after{ content:"%"; font-size:.7em; margin-left:1px; color:var(--ink-soft); }
+
+  /* —— Hero 大數字 —— */
+  .split-stats{
+    display:flex; flex-wrap:wrap; gap:14px 40px; margin-top:24px;
+  }
+  .split-stats .stat{ flex:1 1 200px; }
+  .split-stats .k{ font-size:.74rem; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--ink-soft); font-weight:700; display:flex; align-items:center; gap:7px; }
+  .split-stats .k .dot{ width:11px; height:11px; border-radius:50%; }
+  .split-stats .v{ font-family:var(--serif); font-weight:700;
+    font-size:clamp(2.4rem,7vw,3.8rem); line-height:1; margin-top:4px;
+    font-variant-numeric:tabular-nums; }
+  .split-stats .v small{ font-size:.34em; color:var(--ink-soft); margin-left:3px; }
+  .split-stats .note-txt{ font-size:.86rem; color:var(--ink-soft); margin-top:6px; }
+
+  /* 方法/註解卡 */
+  .meta-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:24px; }
+  .meta-grid h3{ font-size:.78rem; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--crimson); margin:0 0 8px; }
+  .meta-grid p{ margin:0; font-size:.9rem; color:var(--ink-soft); }
+  .callout{
+    border-left:3px solid var(--gold); background:rgba(168,134,47,.08);
+    padding:14px 18px; margin:24px 0 0; border-radius:0 4px 4px 0;
+    font-size:.9rem; color:var(--ink-soft);
+  }
+  .callout b{ color:var(--ink); }
+
+  footer{
+    margin-top:88px; padding-top:22px; border-top:1.5px solid var(--ink);
+    font-size:.8rem; color:var(--ink-soft);
+    display:flex; flex-wrap:wrap; gap:6px 28px; justify-content:space-between;
+  }
+  footer .src{ max-width:60ch; }
+  a{ color:var(--crimson); }
+
+  :focus-visible{ outline:2px solid var(--crimson); outline-offset:3px; border-radius:2px; }
+
+  @media (max-width:560px){
+    .bar{ height:96px; } .bar.tall{ height:112px; }
+    .sec-head .en{ display:none; }
+  }
+</style>
+</head>
+<body>
+<canvas id="guilloche-bg" aria-hidden="true"></canvas>
+
+<div class="wrap">
+
+  <!-- ════════ HERO ════════ -->
+  <header>
+    <p class="eyebrow">台灣食物美元系列 · Taiwan Food Dollar Series · 2021</p>
+    <h1>每 100 元的食物支出,<br>流向了誰的口袋?</h1>
+    <p class="lede">
+      參照美國農業部 USDA <em>Food Dollar Series</em> 方法,以行政院主計總處
+      <strong>2021 年產業關聯表</strong>為基礎,將國人每一塊錢的食物消費,
+      沿著農場到餐桌的供應鏈逐層分解。下面這張「百元券」,就是台灣人花在食物上的每 100 元。
+    </p>
+
+    <div class="note" style="margin-top:30px;">
+      <span class="note-corner tl">100</span>
+      <span class="note-corner br">FOOD DOLLAR</span>
+      <div style="height:14px;"></div>
+      <div class="bar tall" role="img" aria-label="市場支出鏈:農場份額 21.16%,市場份額 78.84%">
+        <div class="seg" style="width:21.16%; background:var(--farm);">
+          <span class="pct">21.16%</span><span class="lab">農場份額</span>
+        </div>
+        <div class="seg" style="width:78.84%; background:var(--crimson);">
+          <span class="pct">78.84%</span><span class="lab">市場份額(運輸・加工・批發零售・餐飲…)</span>
+        </div>
+      </div>
+
+      <div class="split-stats">
+        <div class="stat">
+          <div class="k"><span class="dot" style="background:var(--farm)"></span>農場份額 Farm share</div>
+          <div class="v">21.16<small>%</small></div>
+          <div class="note-txt">回到農民手中的初級農產品淨值</div>
+        </div>
+        <div class="stat">
+          <div class="k"><span class="dot" style="background:var(--crimson)"></span>市場份額 Marketing share</div>
+          <div class="v">78.84<small>%</small></div>
+          <div class="note-txt">加工、運銷、餐飲等供應鏈各環節的加值</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ════════ 1 · 市場支出鏈 ════════ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-idx">Ⅰ</span>
+      <h2>市場支出鏈</h2>
+      <span class="en">Marketing Bill Series</span>
+    </div>
+    <p class="sec-desc">
+      最直觀的一刀:把食物支出切成「農場」與「市場」兩半。2021 年台灣每花 100 元在食物上,
+      僅約 <strong>21 元</strong>是農民實得的初級農產品價值,其餘近 <strong>79 元</strong>
+      支付給運輸、加工、批發、零售與餐飲等中間環節 —— 這正是「行銷帳單(marketing bill)」。
+    </p>
+    <div class="callout">
+      <b>怎麼讀:</b>農場份額採用投入產出的淨值法,先求出食物最終需求所誘發的農業產出,
+      再扣除供應鏈中反覆投入的農業中間財,得到農民「淨」得的價值佔比。
+    </div>
+  </section>
+
+  <!-- ════════ 2 · 產業群組鏈 ════════ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-idx">Ⅱ</span>
+      <h2>產業群組鏈</h2>
+      <span class="en">Industry Group Series</span>
+    </div>
+    <p class="sec-desc">
+      換個角度,把這 100 元拆給供應鏈上 <strong>12 個產業群組</strong>。
+      食品加工、餐飲、批發、零售四者合計逾六成,反映台灣食物消費高度依賴
+      下游運銷與外食服務的加值。
+    </p>
+
+    <div class="note">
+      <div class="bar" id="bar-ig" role="img"
+           aria-label="產業群組鏈各部門加值佔比長條圖"></div>
+    </div>
+    <ul class="legend" id="legend-ig"></ul>
+  </section>
+
+  <!-- ════════ 3 · 原始投入鏈 ════════ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-idx">Ⅲ</span>
+      <h2>原始投入鏈</h2>
+      <span class="en">Primary Factor Series</span>
+    </div>
+    <p class="sec-desc">
+      最後一種視角:不問「哪個產業」,而問「哪種生產要素」拿走了這 100 元。
+      <strong>受僱人員報酬</strong>(勞動)獨佔近一半,加上營業盈餘,
+      顯示食物價格的大宗最終流向勞動與資本所得;<strong>進口</strong>則是約 17 元的境外漏出。
+    </p>
+
+    <div class="note">
+      <div class="bar" id="bar-pf" role="img"
+           aria-label="原始投入鏈各生產要素佔比長條圖"></div>
+    </div>
+    <ul class="legend" id="legend-pf"></ul>
+  </section>
+
+  <!-- ════════ 方法與註記 ════════ -->
+  <section>
+    <div class="sec-head">
+      <span class="sec-idx">§</span>
+      <h2>方法與註記</h2>
+      <span class="en">Method &amp; Notes</span>
+    </div>
+    <div class="meta-grid">
+      <div>
+        <h3>資料來源</h3>
+        <p>行政院主計總處 2021 年產業關聯表(163 部門):國產品交易表、生產者價格表、進口品交易表、國內運費表、商業加價表。</p>
+      </div>
+      <div>
+        <h3>方法依據</h3>
+        <p>USDA ERS <em>Food Dollar Series</em>(Canning, 2011)之三條金額鏈:市場支出鏈、產業群組鏈、原始投入鏈。</p>
+      </div>
+      <div>
+        <h3>口徑提醒</h3>
+        <p>三條鏈的「農場份額」定義不同 —— 市場支出鏈(21.16%)與產業群組鏈中農業生產(12.98%)＋農事服務(2.03%)屬不同口徑,不宜直接相比。</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span class="src">資料:主計總處 2021 產業關聯表 · 方法:USDA Food Dollar Series · 單位:佔食物最終消費支出之百分比</span>
+    <span>2021FDS · Taiwan Food Dollar</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ——— 資料 ——— */
+  var industryGroups = [
+    {zh:"農業生產", en:"Farm production",      v:12.98, c:"#2e6b4a"},
+    {zh:"農事服務", en:"Agribusiness",         v:2.03,  c:"#4c8a5a"},
+    {zh:"食品加工", en:"Food processing",      v:18.87, c:"#7e8a3e"},
+    {zh:"包裝",     en:"Packaging",            v:2.43,  c:"#a8862f"},
+    {zh:"運輸",     en:"Transportation",       v:2.42,  c:"#2e7e78"},
+    {zh:"批發",     en:"Wholesale",            v:18.22, c:"#2c6e92"},
+    {zh:"零售",     en:"Retail",               v:17.33, c:"#2f5c9e"},
+    {zh:"餐飲",     en:"Food service",         v:18.52, c:"#3e4e94"},
+    {zh:"能源",     en:"Energy",               v:3.78,  c:"#5e4e8e"},
+    {zh:"金融保險", en:"Finance & insurance",  v:1.97,  c:"#7a4e84"},
+    {zh:"廣告",     en:"Advertising",          v:1.27,  c:"#9a4a66"},
+    {zh:"法律會計", en:"Legal & accounting",   v:0.17,  c:"#8a5a4e"}
+  ];
+  var primaryFactors = [
+    {zh:"受僱人員報酬",   en:"Compensation",          v:45.76, c:"#2e6b4a"},
+    {zh:"營業盈餘",       en:"Operating surplus",     v:26.99, c:"#5e8a3e"},
+    {zh:"固定資本消耗",   en:"Fixed capital",         v:6.90,  c:"#a8862f"},
+    {zh:"生產及進口稅淨額",en:"Net taxes",            v:3.15,  c:"#2c6e92"},
+    {zh:"調整項目",       en:"Statistical adjustment",v:0.03,  c:"#9a9486"},
+    {zh:"進口",           en:"Import (leakage)",      v:17.18, c:"#a4303b"}
+  ];
+
+  function buildBar(el, data){
+    data.forEach(function(d){
+      var seg = document.createElement("div");
+      seg.className = "seg" + (d.v < 4 ? " hide-lab" : "");
+      seg.style.width = d.v + "%";
+      seg.style.background = d.c;
+      seg.title = d.zh + " " + d.v.toFixed(2) + "%";
+      seg.innerHTML = '<span class="pct">' + d.v.toFixed(1) + '%</span>' +
+                      '<span class="lab">' + d.zh + '</span>';
+      el.appendChild(seg);
+    });
+  }
+  function buildLegend(el, data){
+    data.slice().sort(function(a,b){return b.v-a.v;}).forEach(function(d){
+      var li = document.createElement("li");
+      li.innerHTML =
+        '<span class="sw" style="background:'+d.c+'"></span>' +
+        '<span class="nm">'+d.zh+'<small>'+d.en+'</small></span>' +
+        '<span class="vv">'+d.v.toFixed(2)+'</span>';
+      el.appendChild(li);
+    });
+  }
+
+  buildBar(document.getElementById("bar-ig"), industryGroups);
+  buildBar(document.getElementById("bar-pf"), primaryFactors);
+  buildLegend(document.getElementById("legend-ig"), industryGroups);
+  buildLegend(document.getElementById("legend-pf"), primaryFactors);
+
+  /* ——— 鈔券底紋(engine-turned guilloché)——— */
+  var canvas = document.getElementById("guilloche-bg");
+  var ctx = canvas.getContext("2d");
+  function draw(){
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = window.innerWidth, h = window.innerHeight;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,w,h);
+    ctx.strokeStyle = "rgba(46,107,74,0.10)";
+    ctx.lineWidth = 0.6;
+
+    // 交織波紋:多條干涉正弦線,模擬鈔票防偽雕紋
+    var rows = Math.ceil(h / 26) + 2;
+    for(var r=0; r<rows; r++){
+      var base = r*26;
+      var f1 = 0.018 + (r%5)*0.0016;
+      var f2 = 0.041 + (r%3)*0.0021;
+      var a1 = 9, a2 = 4;
+      ctx.beginPath();
+      for(var x=0; x<=w; x+=4){
+        var y = base + a1*Math.sin(x*f1 + r*0.6) + a2*Math.sin(x*f2 + r);
+        if(x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    }
+
+    // 中央玫瑰花飾(rosette)
+    var cx = w*0.5, cy = h*0.42, R = Math.min(w,h)*0.30;
+    ctx.strokeStyle = "rgba(164,48,59,0.07)";
+    for(var k=0; k<4; k++){
+      var petals = 7 + k*4, amp = 0.30 - k*0.04, rr = R*(1 - k*0.12);
+      ctx.beginPath();
+      for(var t=0; t<=Math.PI*2+0.05; t+=0.012){
+        var rad = rr*(1 + amp*Math.cos(petals*t));
+        var px = cx + rad*Math.cos(t), py = cy + rad*Math.sin(t);
+        if(t===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+      }
+      ctx.stroke();
+    }
+  }
+  draw();
+  var rid;
+  window.addEventListener("resize", function(){
+    clearTimeout(rid); rid = setTimeout(draw, 150);
+  });
+})();
+</script>
+</body>
+</html>
